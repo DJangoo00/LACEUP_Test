@@ -1,0 +1,312 @@
+﻿@page "/"
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Home</PageTitle>
+
+<h1 class="text-center">LaceUp Orders</h1>
+<div class="container">
+    <div class="text-center">
+        <button class="btn btn-primary btn-sm mt-3 mb-3" @onclick="ShowOrders">Load Orders</button>
+        <button class="btn btn-primary btn-sm mt-3 mb-3" @onclick="() => OpenDeleteDialog()">Load File</button>
+        <button class="btn btn-success btn-sm mt-3 mb-3" @onclick="AddOrder">Add Orders</button>
+        <button class="btn btn-success btn-sm mt-3 mb-3" @onclick="AddProduct">Add Products</button>
+    </div>
+
+    <div class="grid">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-7">
+                <h2>Orders</h2>
+                <div>
+                    <table id="OrdersTable" class="display table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Order Number</th>
+                                <th>Date</th>
+                                <th>Item Count</th>
+                                <th>Total Price</th>
+                                <th>Customer Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in orders)
+                            {
+                                <tr @onclick="() => ShowProductsById(order.id)">
+                                    <td>@order.id</td>
+                                    <td>@order.createDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@order.itemCount</td>
+                                    <td>@order.totalPrice</td>
+                                    <td>@order.customerName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-5">
+                <h2>Order Details</h2>
+                <div>
+                    <table id="OrderDetailsTable" class="display">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var orderDetail in products)
+                            {
+                                <tr @onclick="() => EditProductById(orderDetail.id)">
+                                    <td class="d-none">@orderDetail.id</td>
+                                    <td>@orderDetail.productName</td>
+                                    <td>@orderDetail.price</td>
+                                    <td>@orderDetail.quantity</td>
+                                    <td>@orderDetail.comment</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Order Form -->
+    <div class="form-container m-3" style="display: @(showOrderForm ? "block" : "none");">
+        <h4>Add Order</h4>
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-6">
+                <label>Date:</label>
+                <input type="date" @bind="newOrder.createDate" class="form-control" />
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+                <label>Item Count:</label>
+                <input type="number" @bind="newOrder.itemCount" class="form-control" />
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+                <label>Total Price:</label>
+                <input type="number" @bind="newOrder.totalPrice" class="form-control" />
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+                <label>Customer Name:</label>
+                <input type="text" @bind="newOrder.customerName" class="form-control" />
+            </div>
+        </div>
+        <div class="text-center">
+            <button class="btn btn-success mt-3" @onclick="SaveOrder">Save Order</button>
+            <button class="btn btn-secondary mt-3" @onclick="HideOrderForm">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Add Product Form -->
+    <div class="form-container m-3" style="display: @(showProductForm ? "block" : "none");">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col lg-6">
+                <h4>Add Product</h4>
+            </div>
+            <div class="col-sm-12 col-md-3 col lg-3">
+                <h4>Selected Order:</h4>
+            </div>
+            <div class="col-sm-12 col-md-3 col lg-3">
+                <h4>@selectOrder</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-6">
+                <label>Product Name:</label>
+                <input type="text" @bind="newProduct.productName" class="form-control" />
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+                <label>Price:</label>
+                <input type="number" @bind="newProduct.price" class="form-control" />
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+                <label>Quantity:</label>
+                <input type="number" @bind="newProduct.quantity" class="form-control" />
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+                <label>Comment:</label>
+                <input type="text" @bind="newProduct.comment" class="form-control" />
+            </div>
+        </div>
+        <div class="text-center">
+            <button class="btn btn-success mt-3" @onclick="SaveProduct">Save Product</button>
+            <button class="btn btn-secondary mt-3" @onclick="HideProductForm">Cancel</button>
+        </div>
+    </div>
+    <!-- forms -->
+    @if(DeleteDialogOpen)
+    {
+        <LoadFileModal OnClose="@OnDeleteDialogClose"></LoadFileModal>
+    }
+    
+</div>
+
+@code {
+    //variables & calls
+    private FrontEnd.Services.ApiService apiService;
+    private List<FrontEnd.Models.OrderModel> orders = new List<FrontEnd.Models.OrderModel>();
+    private List<FrontEnd.Models.ProductModel> products = new List<FrontEnd.Models.ProductModel>();
+    private FrontEnd.Models.OrderModel newOrder = new FrontEnd.Models.OrderModel();
+    private FrontEnd.Models.ProductModel newProduct = new FrontEnd.Models.ProductModel();
+    private bool showOrderForm = false;
+    private bool showProductForm = false;
+    private int selectOrder = 0;
+    private int selectProduct = 0;
+
+    private void OnDeleteDialogClose (bool accepted)
+    {
+        DeleteDialogOpen = false;
+        StateHasChanged();
+    }
+    private void OpenDeleteDialog()
+    {
+        DeleteDialogOpen = true;
+        StateHasChanged();
+    }
+    public bool DeleteDialogOpen { get; set; }
+
+    [Inject]
+    private HttpClient HttpClient { get; set; }
+    protected override void OnInitialized()
+    {
+        apiService = new FrontEnd.Services.ApiService();
+    }
+    private void HideOrderForm()
+    {
+        showOrderForm = false;
+        newOrder = new();
+    }
+
+    private void HideProductForm()
+    {
+        showProductForm = false;
+        newProduct = new();
+    }
+
+    private void AddOrder()
+    {
+        showOrderForm = true;
+        HideProductForm();
+    }
+    private async void SaveOrder()
+    {
+        apiService.PostOrder(newOrder);
+        orders.Add(newOrder);
+        newOrder = new();
+        showOrderForm = false;
+        await JSRuntime.InvokeVoidAsync("eval", "$('#OrdersTable').DataTable().destroy();");
+        StateHasChanged();
+        await JSRuntime.InvokeVoidAsync("eval", "$(document).ready(function () { $('#OrdersTable').DataTable(); });");
+    }
+
+    private void AddProduct()
+    {
+        showProductForm = true;
+        HideOrderForm();
+    }
+    private async void SaveProduct()
+    {
+        newProduct.idOrderFk = selectOrder;
+        if (selectProduct == 0)
+        {
+            await apiService.PostProduct(newProduct);
+            products.Add(newProduct);
+        }
+        else if (selectProduct != 0)
+        {
+            var productToUpdate = products.FirstOrDefault(p => p.id == selectProduct);
+            if (productToUpdate != null)
+            {
+                // Actualizar el producto en el servidor
+                await apiService.PutProduct(newProduct, selectProduct);
+
+                // Actualizar los valores del producto existente en la lista
+                productToUpdate.productName = newProduct.productName;
+                productToUpdate.price = newProduct.price;
+                productToUpdate.quantity = newProduct.quantity;
+                productToUpdate.comment = newProduct.comment;
+            }
+        }
+        newProduct = new();
+        showProductForm = false;
+        await UpdateDataTable();
+    }
+
+    private async Task UpdateDataTable()
+    {
+        await JSRuntime.InvokeVoidAsync("eval", "$('#OrderDetailsTable').DataTable().destroy();");
+        StateHasChanged();
+        await JSRuntime.InvokeVoidAsync("eval", "$(document).ready(function () { $('#OrderDetailsTable').DataTable(); });");
+    }
+
+
+    //load data
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadDataTables();
+        }
+    }
+    private async Task LoadDataTables()
+    {
+        await JSRuntime.InvokeVoidAsync("eval", "$(document).ready(function () { $('#OrdersTable').DataTable(); });");
+        //await JSRuntime.InvokeVoidAsync("eval", "$(document).ready(function () { $('#OrderDetailsTable').DataTable(); });");
+    }
+    //show data
+    private async Task ShowOrders()
+    {
+        try
+        {
+            orders = await apiService.GetOrders();
+            await JSRuntime.InvokeVoidAsync("eval", "$('#OrdersTable').DataTable().destroy();");
+            StateHasChanged();
+            await JSRuntime.InvokeVoidAsync("eval", "$(document).ready(function () { $('#OrdersTable').DataTable(); });");
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage(ex.Message.ToString());
+        }
+    }
+
+    private async Task ShowProductsById(int id)
+    {
+        try
+        {
+            selectOrder = id;
+            products = await apiService.GetProductsByOrder(id);
+            await JSRuntime.InvokeVoidAsync("eval", "$('#OrderDetailsTable').DataTable().destroy();");
+            StateHasChanged();
+            await JSRuntime.InvokeVoidAsync("eval", "$(document).ready(function () { $('#OrderDetailsTable').DataTable(); });");
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage(ex.Message.ToString());
+        }
+    }
+
+    private async Task EditProductById(int id)
+    {
+        try
+        {
+            selectProduct = id;
+            newProduct = await apiService.GetProductById(id);
+            showProductForm = true;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage(ex.Message.ToString());
+        }
+    }
+
+    //alerts
+    private void SaveSuccess()
+    {
+        Console.WriteLine("Save success!");
+    }
+    private void ErrorMessage(string Message)
+    {
+        Console.WriteLine($"Error!: {Message}");
+    }
+}

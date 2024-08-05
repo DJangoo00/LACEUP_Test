@@ -1,0 +1,15 @@
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\bin\Debug\net7.0\Persistence.deps.json
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\bin\Debug\net7.0\Persistence.dll
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\bin\Debug\net7.0\Persistence.pdb
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\bin\Debug\net7.0\Domain.dll
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\bin\Debug\net7.0\Domain.pdb
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\obj\Debug\net7.0\Persistence.csproj.AssemblyReference.cache
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\obj\Debug\net7.0\Persistence.GeneratedMSBuildEditorConfig.editorconfig
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\obj\Debug\net7.0\Persistence.AssemblyInfoInputs.cache
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\obj\Debug\net7.0\Persistence.AssemblyInfo.cs
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\obj\Debug\net7.0\Persistence.csproj.CoreCompileInputs.cache
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\obj\Debug\net7.0\Persiste.61C28332.Up2Date
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\obj\Debug\net7.0\Persistence.dll
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\obj\Debug\net7.0\refint\Persistence.dll
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\obj\Debug\net7.0\Persistence.pdb
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\Persistence\obj\Debug\net7.0\ref\Persistence.dll

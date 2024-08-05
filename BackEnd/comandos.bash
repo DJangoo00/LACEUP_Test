@@ -1,0 +1,1 @@
+dotnet ef dbcontext scaffold "Data Source=(localdb)\LocalHost;Initial Catalog=LaceUpDB;Integrated Security=True; Encrypt=False" Microsoft.EntityFrameworkCore.SqlServer -s ./API/ -p ./Persistence/ --context ApiContext --context-dir Data --output-dir Entities

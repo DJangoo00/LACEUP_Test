@@ -1,0 +1,17 @@
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\bin\Debug\net7.0\App.deps.json
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\bin\Debug\net7.0\App.dll
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\bin\Debug\net7.0\App.pdb
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\bin\Debug\net7.0\Domain.dll
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\bin\Debug\net7.0\Persistence.dll
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\bin\Debug\net7.0\Persistence.pdb
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\bin\Debug\net7.0\Domain.pdb
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\obj\Debug\net7.0\App.csproj.AssemblyReference.cache
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\obj\Debug\net7.0\App.GeneratedMSBuildEditorConfig.editorconfig
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\obj\Debug\net7.0\App.AssemblyInfoInputs.cache
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\obj\Debug\net7.0\App.AssemblyInfo.cs
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\obj\Debug\net7.0\App.csproj.CoreCompileInputs.cache
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\obj\Debug\net7.0\App.csproj.Up2Date
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\obj\Debug\net7.0\App.dll
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\obj\Debug\net7.0\refint\App.dll
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\obj\Debug\net7.0\App.pdb
+D:\dalgr\Documents\Dev\PruebaTecnica_LaceUp\BackEnd\App\obj\Debug\net7.0\ref\App.dll

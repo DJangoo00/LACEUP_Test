@@ -1,0 +1,78 @@
+﻿﻿<div class="modal fade show" id="ModalFile" style="display:block; background-color: rgba(10,10,10,.8);"
+    aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Load file</h4>
+                <button type="button" class="close btn btn-sm btn-danger" @onclick="ModalCancel">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Only load .xslx format files</p>
+                <div class="row">
+                    <div class="col-10">
+                        <InputFile OnChange="HandleFileSelected" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="close btn btn-sm btn-success" @onclick="LoadFile">Load</button>
+                <button type="button" class="btn btn-sm btn-warning" @onclick="ModalCancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+@if (showSuccessModal)
+{
+    <ModalDialog Title="Success" Text="The file was loaded and saved successfully!"
+        DialogType="ModalDialog.ModalDialogType.Ok"/>
+}
+
+@code {
+    [Inject] private ExcelService ExcelService { get; set; }
+    [Inject] private ApiService ApiService { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+    private bool showSuccessModal = false;
+    private IBrowserFile selectedFile;
+
+    private async Task ModalCancel()
+    {
+        await OnClose.InvokeAsync(false);
+    }
+
+    private async Task ModalOk()
+    {
+        await OnClose.InvokeAsync(true);
+        showSuccessModal = true;
+    }
+
+    private async Task LoadFile()
+    {
+        if (selectedFile != null)
+        {
+            using var stream = selectedFile.OpenReadStream();
+            var (order, products) = await ExcelService.ReadExcelFile(stream);
+
+            if (order != null)
+            {
+                var success = await ApiService.PostRange(order, products);
+
+                if (success)
+                {
+                    await ModalOk();
+                    showSuccessModal = true;
+                }
+                else
+                {
+                    // Manejo de error al enviar los datos
+                }
+            }
+        }
+    }
+
+    private void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+    }
+}
